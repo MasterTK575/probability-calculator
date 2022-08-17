@@ -73,9 +73,8 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
         # compare the draw to what you want to see
         result_boolean = False
         for key, value in expected_balls.items():
-            # if the value of the key (the ball) is equal or greater than..
-            # the value of the same key in the result dictionary..
-            # return True, else false
+            # if the amount of balls of a certain color (key) actually drawn is..
+            # equal to or greater than what we want, we return True, else False
             # try and except in case the key is not present in the dict
             try:
                 if result_dict[key] >= value:
@@ -83,7 +82,7 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
                 else:
                     result_boolean = False
                     # we have to break out of the loop in case it's false
-                    # otherwise if only the last one is True,...
+                    # otherwise if only the last one is True...
                     # the program thinks the whole experiment was successfull
                     break
             except:
