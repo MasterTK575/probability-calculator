@@ -23,41 +23,41 @@ class Hat:
         # print(random.randint(0, len(self.contents)- 1))
         drawn = list()
 
-        # contentscopy = self.contents does not work
-        # it only creates a shallow copy and shallow copies refer to the original object
-        # this means that changes in one affect the other
-        contentscopy = copy.deepcopy(self.contents)
-
         # draw the amount of times given
         for draw in range(times):
             # option 2: just return a random item from the list
+            # we use self.contents, because we want to remove balls from the actual hat
             try:
-                balldrawn = random.choice(contentscopy)
+                balldrawn = random.choice(self.contents)
             except:
                 print("Returning all balls.")
-                contentscopy = copy.deepcopy(self.contents)
-                balldrawn = random.choice(contentscopy)
+                # we copy the drawn balls back into self.contents and empty the drawn list
+                # self.contents = drawn does not work
+                # it only creates a shallow copy and shallow copies refer to the original object
+                # this means that changes in one affect the other
+                self.contents = copy.deepcopy(drawn)
+                drawn = list()
+                balldrawn = random.choice(self.contents)
 
-            contentscopy.remove(balldrawn)
+            self.contents.remove(balldrawn)
             drawn.append(balldrawn)
 
-        # self.contents remains untouched since we created a copy
-        #print(self.contents)
-        #print(contentscopy)
         return drawn
         
 
 # by adding "*" we force all succeeding arguments to be named (aka. keyword arguments)
 def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
-    # I don't have to create a copy for hat, since inside the draw function..
-    # self.contencts remains untouched
-    # therefore we start fresh each experiment
 
     times_result = 0
     # do the experiment x amount of times
     for experiment in range(num_experiments):
+
+        # we want to start fresh each experiment, i.e. have the hat with all balls each time
+        # if we didn't do this, the hat would get depleted each draw
+        hat_copy = copy.deepcopy(hat)
+
         # draw the balls
-        result = hat.draw(num_balls_drawn)
+        result = hat_copy.draw(num_balls_drawn)
         #print(result)
         
         # create a dictionary with counts for each ball
@@ -88,7 +88,7 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
     return probability
 
 hat = Hat(black=6, red=4, green=3)
-hat.draw(10)
+hat.draw(14)
 
 print(experiment(hat=hat, expected_balls={"red":2,"green":1},num_balls_drawn=5,num_experiments=2000))
 
