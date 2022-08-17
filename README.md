@@ -11,11 +11,12 @@ Process:
 4. Create experiment function
 
 What I've learned:
-1. How to write functions with variable number of arguments; more specifically with keyword arguments
+1. How to write functions with variable number of arguments; more specifically with keyword arguments; also how to force keyword arguments
 2. Iterating through dictionaries by using .items() and transforming them to tuples
 3. Using the range() function to iterate a specified number of times
 4. How to use the random module; specifically random.choice() to choose a random element in a list
 5. How to remove elements from a list
-6. Understanding the difference between shallow and deep copies
+6. Understanding the difference between shallow and deep copies (for lists)
+7. How to populate a dictionary with get() to create a key-count
 
 
