@@ -23,6 +23,11 @@ class Hat:
         # print(random.randint(0, len(self.contents)- 1))
         drawn = list()
 
+        # content_copy = self.contents does not work
+        # it only creates a shallow copy and shallow copies refer to the original object
+        # this means that changes in one affect the other
+        content_copy = copy.deepcopy(self.contents)
+
         # draw the amount of times given
         for draw in range(times):
             # option 2: just return a random item from the list
@@ -30,13 +35,11 @@ class Hat:
             try:
                 balldrawn = random.choice(self.contents)
             except:
-                print("Returning all balls.")
-                # we copy the drawn balls back into self.contents and empty the drawn list
-                # self.contents = drawn does not work
-                # it only creates a shallow copy and shallow copies refer to the original object
-                # this means that changes in one affect the other
-                self.contents = copy.deepcopy(drawn)
-                drawn = list()
+                # if the list is empty, i.e. all balls were drawn:
+                # we recreate the list
+                self.contents = copy.deepcopy(content_copy)
+                # we leave the drawn list untouched because we want to keep going
+
                 balldrawn = random.choice(self.contents)
 
             self.contents.remove(balldrawn)
@@ -55,10 +58,11 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
         # we want to start fresh each experiment, i.e. have the hat with all balls each time
         # if we didn't do this, the hat would get depleted each draw
         hat_copy = copy.deepcopy(hat)
+        # print(hat_copy.contents)
 
         # draw the balls
         result = hat_copy.draw(num_balls_drawn)
-        #print(result)
+        # print(result)
         
         # create a dictionary with counts for each ball
         result_dict = dict()
@@ -74,12 +78,17 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
             # return True, else false
             # try and except in case the key is not present in the dict
             try:
-                if value >= result_dict[key]:
+                if result_dict[key] >= value:
                     result_boolean = True
                 else:
                     result_boolean = False
+                    # we have to break out of the loop in case it's false
+                    # otherwise if only the last one is True,...
+                    # the program thinks the whole experiment was successfull
+                    break
             except:
                 result_boolean = False
+                break
         
         # if we did get the desired result, increase the count
         if result_boolean == True:
@@ -87,9 +96,8 @@ def experiment(*, hat, expected_balls, num_balls_drawn, num_experiments):
     probability = times_result / num_experiments
     return probability
 
-hat = Hat(black=6, red=4, green=3)
-hat.draw(14)
+hat = Hat(yellow=5,red=1,green=3,blue=9,test=1)
 
-print(experiment(hat=hat, expected_balls={"red":2,"green":1},num_balls_drawn=5,num_experiments=2000))
+print(experiment(hat=hat, expected_balls={"yellow":2,"blue":3,"test":1}, num_balls_drawn=20, num_experiments=1))
 
 

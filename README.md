@@ -18,5 +18,6 @@ What I've learned:
 5. How to remove elements from a list
 6. Understanding the difference between shallow and deep copies (for lists)
 7. How to populate a dictionary with get() to create a key-count
-
+8. How to debug by working through code step by step and analyzing the problem
+9. How to respond to unit tests and fix the code appropriatly
 
